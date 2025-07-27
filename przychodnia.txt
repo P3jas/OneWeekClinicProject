@@ -1,0 +1,225 @@
+-- phpMyAdmin SQL Dump
+-- version 5.1.3
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Czas generowania: 02 Cze 2022, 19:04
+-- Wersja serwera: 10.4.24-MariaDB
+-- Wersja PHP: 8.1.4
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+--
+-- Baza danych: `przychodnia`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `gabinet`
+--
+
+CREATE TABLE `gabinet` (
+  `ID_gabinet` int(50) NOT NULL,
+  `Nr_gabinetu` int(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Zrzut danych tabeli `gabinet`
+--
+
+INSERT INTO `gabinet` (`ID_gabinet`, `Nr_gabinetu`) VALUES
+(1, 1),
+(2, 2),
+(3, 3),
+(4, 4),
+(5, 5);
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `lekarze`
+--
+
+CREATE TABLE `lekarze` (
+  `ID_lekarz` int(50) NOT NULL,
+  `Imię` text NOT NULL,
+  `Nazwisko` text NOT NULL,
+  `PESEL` text NOT NULL,
+  `Telefon` int(9) NOT NULL,
+  `Tytul` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Zrzut danych tabeli `lekarze`
+--
+
+INSERT INTO `lekarze` (`ID_lekarz`, `Imię`, `Nazwisko`, `PESEL`, `Telefon`, `Tytul`) VALUES
+(1, 'Andrzej', 'Dudu', '93892812329', 983029123, 'Chirurg'),
+(2, 'Monika', 'Grzyb', '93892812392', 989389123, 'Okulista'),
+(3, 'Mikolaj', 'Lis', '98391239212', 989302133, 'Chirurg'),
+(4, 'Wladyslaw', 'Stonoga', '938123921', 324231832, 'Neurolog'),
+(5, 'Kacper', 'Kozlak', '93892829112', 983123833, 'Ginekolog');
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `pacjenci`
+--
+
+CREATE TABLE `pacjenci` (
+  `ID_pacjent` int(50) NOT NULL,
+  `Imię` text NOT NULL,
+  `Nazwisko` text NOT NULL,
+  `PESEL` text NOT NULL,
+  `Telefon` int(9) NOT NULL,
+  `ID_uzytkownik` int(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Zrzut danych tabeli `pacjenci`
+--
+
+INSERT INTO `pacjenci` (`ID_pacjent`, `Imię`, `Nazwisko`, `PESEL`, `Telefon`, `ID_uzytkownik`) VALUES
+(1, 'Bartosz', 'Golczas', '38423123192', 983123221, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `uzytkownik`
+--
+
+CREATE TABLE `uzytkownik` (
+  `ID_uzytkownik` int(50) NOT NULL,
+  `Login` text NOT NULL,
+  `Haslo` text NOT NULL,
+  `Email` text NOT NULL,
+  `Rodzaj` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Zrzut danych tabeli `uzytkownik`
+--
+
+INSERT INTO `uzytkownik` (`ID_uzytkownik`, `Login`, `Haslo`, `Email`, `Rodzaj`) VALUES
+(1, 'Admin', '4e7afebcfbae000b22c7c85e5560f89a2a0280b4', 'admin@admin.admin', 'admin');
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabeli dla tabeli `wizyty`
+--
+
+CREATE TABLE `wizyty` (
+  `ID_wizyta` int(50) NOT NULL,
+  `ID_lekarz` int(50) NOT NULL,
+  `ID_pacjent` int(50) NOT NULL,
+  `ID_gabinet` int(50) NOT NULL,
+  `Data` date NOT NULL,
+  `Godzina` time NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Zrzut danych tabeli `wizyty`
+--
+
+INSERT INTO `wizyty` (`ID_wizyta`, `ID_lekarz`, `ID_pacjent`, `ID_gabinet`, `Data`, `Godzina`) VALUES
+(1, 1, 1, 1, '2022-05-20', '18:00:00');
+
+--
+-- Indeksy dla zrzutów tabel
+--
+
+--
+-- Indeksy dla tabeli `gabinet`
+--
+ALTER TABLE `gabinet`
+  ADD PRIMARY KEY (`ID_gabinet`),
+  ADD KEY `ID_gabinet` (`ID_gabinet`);
+
+--
+-- Indeksy dla tabeli `lekarze`
+--
+ALTER TABLE `lekarze`
+  ADD PRIMARY KEY (`ID_lekarz`),
+  ADD KEY `ID_lekarz` (`ID_lekarz`);
+
+--
+-- Indeksy dla tabeli `pacjenci`
+--
+ALTER TABLE `pacjenci`
+  ADD PRIMARY KEY (`ID_pacjent`),
+  ADD KEY `ID_pacjent` (`ID_pacjent`,`ID_uzytkownik`),
+  ADD KEY `ID_uzytkownik` (`ID_uzytkownik`);
+
+--
+-- Indeksy dla tabeli `uzytkownik`
+--
+ALTER TABLE `uzytkownik`
+  ADD PRIMARY KEY (`ID_uzytkownik`),
+  ADD KEY `ID_uzytkownik` (`ID_uzytkownik`);
+
+--
+-- Indeksy dla tabeli `wizyty`
+--
+ALTER TABLE `wizyty`
+  ADD PRIMARY KEY (`ID_wizyta`),
+  ADD KEY `ID_wizyta` (`ID_wizyta`,`ID_lekarz`,`ID_pacjent`,`ID_gabinet`),
+  ADD KEY `ID_lekarz` (`ID_lekarz`),
+  ADD KEY `ID_gabinet` (`ID_gabinet`),
+  ADD KEY `ID_pacjent` (`ID_pacjent`);
+
+--
+-- AUTO_INCREMENT dla zrzuconych tabel
+--
+
+--
+-- AUTO_INCREMENT dla tabeli `gabinet`
+--
+ALTER TABLE `gabinet`
+  MODIFY `ID_gabinet` int(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT dla tabeli `lekarze`
+--
+ALTER TABLE `lekarze`
+  MODIFY `ID_lekarz` int(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT dla tabeli `pacjenci`
+--
+ALTER TABLE `pacjenci`
+  MODIFY `ID_pacjent` int(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT dla tabeli `uzytkownik`
+--
+ALTER TABLE `uzytkownik`
+  MODIFY `ID_uzytkownik` int(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT dla tabeli `wizyty`
+--
+ALTER TABLE `wizyty`
+  MODIFY `ID_wizyta` int(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- Ograniczenia dla zrzutów tabel
+--
+
+--
+-- Ograniczenia dla tabeli `pacjenci`
+--
+ALTER TABLE `pacjenci`
+  ADD CONSTRAINT `pacjenci_ibfk_1` FOREIGN KEY (`ID_uzytkownik`) REFERENCES `uzytkownik` (`ID_uzytkownik`);
+
+--
+-- Ograniczenia dla tabeli `wizyty`
+--
+ALTER TABLE `wizyty`
+  ADD CONSTRAINT `wizyty_ibfk_1` FOREIGN KEY (`ID_lekarz`) REFERENCES `lekarze` (`ID_lekarz`),
+  ADD CONSTRAINT `wizyty_ibfk_2` FOREIGN KEY (`ID_gabinet`) REFERENCES `gabinet` (`ID_gabinet`),
+  ADD CONSTRAINT `wizyty_ibfk_3` FOREIGN KEY (`ID_pacjent`) REFERENCES `pacjenci` (`ID_pacjent`);
+COMMIT;
